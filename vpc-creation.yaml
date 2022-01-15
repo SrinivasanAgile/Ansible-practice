@@ -81,3 +81,12 @@
         tags:
           Name: privateSubnet-3
       register: privateSubnet3_out
+
+    - name: Creating internet gateway
+      ec2_vpc_igw:
+        vpc_id: "{{vpc_out.vpc.id}}"
+        region: "{{region}}"
+        state: present
+        tags:
+          Name: Srinivasan-IGW
+      register: igw

@@ -115,3 +115,39 @@
         if_exist_do_not_create: true
       register: NATgateway_out
       
+    - name: Routing private subnets with NAT Gateway
+      ec2_vpc_route_table:
+          vpc_id: "{{vpc_out.vpc.id}}"
+          region: "{{region}}"
+          tags:
+            Name: PrivateRouteTable
+          subnets:
+            - "{{ privateSubnet1_out.subnet.id }}"
+            - "{{ privateSubnet2_out.subnet.id }}"
+            - "{{ privateSubnet3_out.subnet_id }}"
+          routes:
+            - dest: 0.0.0.0/0
+              gateway_id: "{{ NATgateway_out.nat_gateway_id }}"
+      register: privateRT
+      
+    - name: printing the ID of all network components
+      debug:
+        var: "{{item}}"
+      loop: 
+        - vpc_out.vpc.id
+        - igw.gateway_id
+        - NATgateway_out.nat_gateway_id
+        - publicSubnet1_out.subnet.id
+        - publicSubnet2_out.subnet.id
+        - publicSubnet3_out.subnet_id 
+        - privateSubnet1_out.subnet.id
+        - privateSubnet2_out.subnet.id
+        - privateSubnet3_out.subnet_id
+
+    - name: storing ID's in a file 
+      copy:
+        content: "vpc.id: {{vpc_out.vpc.id}}\n IGW.id: {{igw.gateway_id}}\n NAT-Gateway.id: {{NATgateway_out.nat_gateway_id}}"
+        dest: vars/output-ids
+
+
+      

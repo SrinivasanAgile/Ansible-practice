@@ -114,4 +114,19 @@
         region: "{{region}}"
         if_exist_do_not_create: true
       register: NATgateway_out
+
+    - name: Routing private subnets with NAT Gateway
+      ec2_vpc_route_table:
+          vpc_id: "{{vpc_out.vpc.id}}"
+          region: "{{region}}"
+          tags:
+            Name: PrivateRouteTable
+          subnets:
+            - "{{ privateSubnet1_out.subnet.id }}"
+            - "{{ privateSubnet2_out.subnet.id }}"
+            - "{{ privateSubnet3_out.subnet_id }}"
+          routes:
+            - dest: 0.0.0.0/0
+              gateway_id: "{{ NATgateway_out.nat_gateway_id }}"
+      register: privateRT
       

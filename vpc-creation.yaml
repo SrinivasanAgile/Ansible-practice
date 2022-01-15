@@ -25,7 +25,7 @@
         state: present
         tags:
           Name: publicSubnet-1
-      register: publicSubnet-1_out
+      register: publicSubnet1_out
 
     - name: Creating public subnet-2 in zone2
       ec2_vpc_subnet:
@@ -36,7 +36,7 @@
         state: present
         tags:
           Name: publicSubnet-2
-      register: publicSubnet-2_out
+      register: publicSubnet2_out
 
     - name: Creating public subnet-3 in zone3
       ec2_vpc_subnet:
@@ -47,7 +47,7 @@
         state: present
         tags:
           Name: publicSubnet-3
-      register: publicSubnet-3_out
+      register: publicSubnet3_out
 
     - name: Creating private subnet-1 in zone1
       ec2_vpc_subnet:
@@ -58,7 +58,7 @@
         state: present
         tags:
           Name: privateSubnet-1
-      register: privateSubnet-1_out
+      register: privateSubnet1_out
 
     - name: Creating private subnet-2 in zone2
       ec2_vpc_subnet:
@@ -69,7 +69,7 @@
         state: present
         tags:
           Name: privateSubnet-2
-      register: privateSubnet-2_out
+      register: privateSubnet2_out
 
     - name: Creating private subnet-3 in zone3
       ec2_vpc_subnet:
@@ -80,4 +80,28 @@
         state: present
         tags:
           Name: privateSubnet-3
-      register: privateSubnet-3_out
+      register: privateSubnet3_out
+
+    - name: Creating internet gateway
+      ec2_vpc_igw:
+        vpc_id: "{{vpc_out.vpc.id}}"
+        region: "{{region}}"
+        state: present
+        tags:
+          Name: Srinivasan-IGW
+      register: igw
+
+    - name: Routing public subnets with IGW
+      ec2_vpc_route_table:
+          vpc_id: "{{vpc_out.vpc.id}}"
+          region: "{{region}}"
+          tags:
+            Name: PublicRouteTable
+          subnets:
+            - "{{ publicSubnet1_out.subnet.id }}"
+            - "{{ publicSubnet2_out.subnet.id }}"
+            - "{{ publicSubnet3_out.subnet_id }}"
+          routes:
+            - dest: 0.0.0.0/0
+              gateway_id: "{{ igw.gateway_id }}"
+      register: publicRT

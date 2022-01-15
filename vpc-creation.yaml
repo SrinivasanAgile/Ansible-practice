@@ -14,4 +14,70 @@
         dns_support: yes
         tenancy: default
         state: "{{state}}"
-      register: vpc-out
+      register: vpc_out
+
+    - name: Creating public subnet-1 in zone1
+      ec2_vpc_subnet:
+        vpc_id: "{{vpc_out.vpc.id}}"
+        region: "{{region}}"
+        az: "{{zone1}}"
+        cidr: "{{PubSub1Cidr}}"
+        state: present
+        tags:
+          Name: publicSubnet-1
+      register: publicSubnet-1_out
+
+    - name: Creating public subnet-2 in zone2
+      ec2_vpc_subnet:
+        vpc_id: "{{vpc_out.vpc.id}}"
+        region: "{{region}}"
+        az: "{{zone2}}"
+        cidr: "{{PubSub2Cidr}}"
+        state: present
+        tags:
+          Name: publicSubnet-2
+      register: publicSubnet-2_out
+
+    - name: Creating public subnet-3 in zone3
+      ec2_vpc_subnet:
+        vpc_id: "{{vpc_out.vpc.id}}"
+        region: "{{region}}"
+        az: "{{zone3}}"
+        cidr: "{{PubSub3Cidr}}"
+        state: present
+        tags:
+          Name: publicSubnet-3
+      register: publicSubnet-3_out
+
+    - name: Creating private subnet-1 in zone1
+      ec2_vpc_subnet:
+        vpc_id: "{{vpc_out.vpc.id}}"
+        region: "{{region}}"
+        az: "{{zone1}}"
+        cidr: "{{PrivSub1Cidr}}"
+        state: present
+        tags:
+          Name: privateSubnet-1
+      register: privateSubnet-1_out
+
+    - name: Creating private subnet-2 in zone2
+      ec2_vpc_subnet:
+        vpc_id: "{{vpc_out.vpc.id}}"
+        region: "{{region}}"
+        az: "{{zone2}}"
+        cidr: "{{PrivSub2Cidr}}"
+        state: present
+        tags:
+          Name: privateSubnet-2
+      register: privateSubnet-2_out
+
+    - name: Creating private subnet-3 in zone3
+      ec2_vpc_subnet:
+        vpc_id: "{{vpc_out.vpc.id}}"
+        region: "{{region}}"
+        az: "{{zone3}}"
+        cidr: "{{PrivSub3Cidr}}"
+        state: present
+        tags:
+          Name: privateSubnet-3
+      register: privateSubnet-3_out

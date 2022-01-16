@@ -100,7 +100,7 @@
           subnets:
             - "{{ publicSubnet1_out.subnet.id }}"
             - "{{ publicSubnet2_out.subnet.id }}"
-            - "{{ publicSubnet3_out.subnet_id }}"
+            - "{{ publicSubnet3_out.subnet.id }}"
           routes:
             - dest: 0.0.0.0/0
               gateway_id: "{{ igw.gateway_id }}"
@@ -124,7 +124,7 @@
           subnets:
             - "{{ privateSubnet1_out.subnet.id }}"
             - "{{ privateSubnet2_out.subnet.id }}"
-            - "{{ privateSubnet3_out.subnet_id }}"
+            - "{{ privateSubnet3_out.subnet.id }}"
           routes:
             - dest: 0.0.0.0/0
               gateway_id: "{{ NATgateway_out.nat_gateway_id }}"
@@ -139,10 +139,10 @@
         - NATgateway_out.nat_gateway_id
         - publicSubnet1_out.subnet.id
         - publicSubnet2_out.subnet.id
-        - publicSubnet3_out.subnet_id 
+        - publicSubnet3_out.subnet.id 
         - privateSubnet1_out.subnet.id
         - privateSubnet2_out.subnet.id
-        - privateSubnet3_out.subnet_id
+        - privateSubnet3_out.subnet.id
 
     - name: storing ID's in a file 
       copy:
